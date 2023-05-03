@@ -1,69 +1,75 @@
 import _ from 'lodash';
 import './style.css';
-import Books from './book_class.js';
-import { storeForm, displayBooks } from './functions.js';
-import { DateTime } from './luxon.js';
-import {
-  addButton, newTitle, newAuthor, container, navHome, navBooks, navContact, homeSection,
-  bookSection, contactSection,
-} from './DOM_Catcher.js';
 
-const books = JSON.parse(localStorage.getItem('form')) || [];
+let tasksList = [
+  {
+    description: "wash the dishes",
+    completed: false,
+    index: 1,
+  },
 
-for (let i = 0; i < books.length; i += 1) {
-  const book = displayBooks(books[i], i);
-  container.innerHTML += book;
+  {
+    description: "complete To Do list project",
+    completed: false,
+    index: 2,
+  }
+]
+
+function iterateTasks(arr) {
+  for(let i = 0; i < arr.length; i += 1){
+  let task = arr[i].description;
+  return task;
+  }
+  
 }
 
-addButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  if (newAuthor.value !== '' && newTitle.value !== '') {
-    const library = new Books(newAuthor.value, newTitle.value, books);
-    library.addBook();
-    storeForm(books);
-    window.location.reload();
-  }
-  document.getElementById('addNewForm').reset();
-});
+const link = document.createElement("link");
+link.href = "./src/style.css";
+link.rel = "stylesheet";
+document.head.appendChild(link);
 
-const deleteBtn = document.querySelectorAll('[id^="delete"]');
-deleteBtn.forEach((button) => {
-  button.addEventListener('click', () => {
-    const libraryOne = new Books(newAuthor.value, newTitle.value, books, button);
-    libraryOne.deleteBook();
-    storeForm(books);
-  });
-});
 
-// SPA
+const target = document.getElementById('listContainer');
+target.innerHTML = `
+<div class="commonClass">
+<p>Today's To Do</p>
+<button class="btnAll">
+<i class="fas fa-sync-alt"></i>
+</button>
+</div>
 
-navHome.addEventListener('click', () => {
-  navHome.style.color = 'blue';
-  navBooks.style.color = 'black';
-  navContact.style.color = 'black';
-  homeSection.style.display = 'flex';
-  bookSection.style.display = 'none';
-  contactSection.style.display = 'none';
-});
-navBooks.addEventListener('click', () => {
-  navHome.style.color = 'black';
-  navBooks.style.color = 'blue';
-  navContact.style.color = 'black';
-  homeSection.style.display = 'none';
-  bookSection.style.display = 'flex';
-  contactSection.style.display = 'none';
-});
-navContact.addEventListener('click', () => {
-  navHome.style.color = 'black';
-  navBooks.style.color = 'black';
-  navContact.style.color = 'blue';
-  homeSection.style.display = 'none';
-  bookSection.style.display = 'none';
-  contactSection.style.display = 'flex';
-});
+<div class="commonClass">
+<input
+type="text"
+class="textInput"
+placeholder="Add to your list..."
+/>
+<button class="btnAll threeDots"
+><i class="fa fa-ellipsis-h"></i
+></button>
+</div>
 
-const timeSlot = document.getElementById('time');
+<div class="commonClass">
+<label class="checkBoxLabel">
+<input class="checkBox" for="checkBox2" type="checkbox" />
+<p id="checkBox2">${tasksList[0].description}</p>
+</label>
+<button class="btnAll threeDots"
+><i class="fa fa-ellipsis-h"></i
+></button>
+</div>
 
-const dt = DateTime.now();
+<div class="commonClass">
+<label class="checkBoxLabel">
+<input class="checkBox" for="checkBox3" type="checkbox" />
+<p id="checkBox3">${tasksList[1].description}</p>
+</label>
+<button class="btnAll threeDots">
+<i class="fa fa-ellipsis-h"></i>
+</button>
+</div>
 
-timeSlot.innerHTML = dt.toLocaleString(DateTime.DATETIME_MED);
+<div class="commonClass clearBtnDiv" >
+<button class="btnCompleteAll"><p>Clear all completed</p></button>
+</div>
+`
